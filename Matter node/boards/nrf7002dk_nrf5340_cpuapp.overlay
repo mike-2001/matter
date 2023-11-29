@@ -1,0 +1,38 @@
+#include <zephyr/dt-bindings/ipc_service/static_vrings.h>
+/delete-node/ &gpio_fwd; /* for UART1 usage */
+/ {
+	chosen {
+		nordic,pm-ext-flash = &mx25r64;
+		zephyr,shell-uart = &uart1;
+	};
+};
+/* Set IPC thread priority to the highest value to not collide with other threads. */
+&ipc0 {
+    zephyr,priority = <0 PRIO_COOP>;
+};
+
+&clock {
+    hfclkaudio-frequency = <12288000>;
+};
+&pinctrl {
+    pdm0_default_alt: pdm0_default_alt {
+        group1 {
+            psels = <NRF_PSEL(PDM_CLK, 1, 5)>,
+                <NRF_PSEL(PDM_DIN, 1, 6)>;
+        };
+    };
+};
+dmic_dev: &pdm0 {
+    status = "okay";
+    pinctrl-0 = <&pdm0_default_alt>;
+    pinctrl-names = "default";
+    clock-source = "ACLK";
+};
+
+&uart1 {
+    status = "okay";
+};
+
+&i2c1 {
+	status = "disabled";
+};
