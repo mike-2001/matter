@@ -1,0 +1,16 @@
+/delete-node/ &gpio_fwd;
+
+/ {
+	chosen {
+		zephyr,shell-uart = &uart1;
+	};
+};
+
+&uart1 {
+    status = "okay";
+};
+
+&i2c1 {
+	status = "disabled";
+};
+
